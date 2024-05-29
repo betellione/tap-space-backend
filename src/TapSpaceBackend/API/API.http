@@ -1,4 +1,4 @@
-@API_HostAddress = http://localhost:8082
+@API_HostAddress = https://tap.miftyakov.site
 
 GET {{API_HostAddress}}/getuserdata/
 Accept: application/json

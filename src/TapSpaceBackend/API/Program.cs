@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,19 @@ app.MapGet("/getuserdata", () =>
         return Results.StatusCode(StatusCodes.Status501NotImplemented);
     })
     .WithName("GetUserData")
-    .WithOpenApi();
+    .WithOpenApi(operation => new OpenApiOperation
+    {
+        Summary = "Get user data",
+        Description = "This endpoint is not implemented yet. It will return status 501.",
+        Responses = new OpenApiResponses
+        {
+            {
+                "501", new OpenApiResponse
+                {
+                    Description = "Not Implemented"
+                }
+            }
+        }
+    });
 
 app.Run();
