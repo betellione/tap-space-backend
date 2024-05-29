@@ -1,5 +1,4 @@
-﻿version: '3.8'
-name: tap_space
+﻿name: tap_space
 services:
   api:
     container_name: tap_space_api

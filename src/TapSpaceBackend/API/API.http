@@ -1,4 +1,4 @@
-@API_HostAddress = http://localhost:8080
+@API_HostAddress = http://localhost:8082
 
 GET {{API_HostAddress}}/getuserdata/
 Accept: application/json
