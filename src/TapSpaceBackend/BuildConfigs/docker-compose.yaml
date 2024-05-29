@@ -1,0 +1,24 @@
+﻿version: '3.8'
+services:
+  api:
+    container_name: api
+    build:
+      context: ../
+      dockerfile: API/Dockerfile
+    ports:
+      - 8080:8080
+    env_file: .env
+    depends_on:
+      - db
+  db:
+    container_name: mice_kazan_db
+    image: postgres:latest
+    restart: always
+    env_file: .env
+    ports:
+      - 6432:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
+    name: db

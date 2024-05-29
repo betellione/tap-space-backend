@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildConfigs", "BuildConfigs", "{ED8D91F3-0803-4913-8741-741FC8590051}"
+	ProjectSection(SolutionItems) = preProject
+		BuildConfigs\.dockerignore = BuildConfigs\.dockerignore
+		BuildConfigs\.env.sample = BuildConfigs\.env.sample
+		BuildConfigs\docker-compose.yaml = BuildConfigs\docker-compose.yaml
+		BuildConfigs\.env = BuildConfigs\.env
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{A8600B71-0169-41E1-A03D-279B2D2825DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8600B71-0169-41E1-A03D-279B2D2825DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8600B71-0169-41E1-A03D-279B2D2825DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8600B71-0169-41E1-A03D-279B2D2825DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8600B71-0169-41E1-A03D-279B2D2825DE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
