@@ -9,8 +9,10 @@ public class Player
     public int Gold { get; set; }
     public int AsteroidsDestroyed { get; set; }
     public int Shields { get; set; }
-    public int OpenSlots { get; set; }
+    public int OpenLootBoxSlots { get; set; }
+    public int OpenGunSlots { get; set; }
 
-    public ICollection<PlayerLootBox> PlayerLootBoxes { get; set; }
-    public ICollection<PlayerAchievement> PlayerAchievements { get; set; }
+    public ICollection<PlayerLootBox> PlayerLootBoxes { get; set; } = new List<PlayerLootBox>();
+    public ICollection<PlayerGun> PlayerGuns { get; set; } = new List<PlayerGun>();
+    public ICollection<PlayerAchievement> PlayerAchievements { get; set; } = new List<PlayerAchievement>();
 }

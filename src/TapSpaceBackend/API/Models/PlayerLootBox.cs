@@ -7,6 +7,6 @@ public class PlayerLootBox
     public DateTime StartOpeningTime { get; set; }
     public int SlotNumber { get; set; }
 
-    public Player Player { get; set; }
-    public LootBoxType LootBoxType { get; set; }
+    public Player? Player { get; set; }
+    public LootBoxType? LootBoxType { get; set; }
 }
