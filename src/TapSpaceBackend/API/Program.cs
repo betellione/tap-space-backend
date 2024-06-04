@@ -1,4 +1,5 @@
 using API.Data;
+using API.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
@@ -9,17 +10,33 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContextFactory<ApplicationDbContext>(o
+    => o.UseNpgsql(builder.Configuration["ConnectionStrings:DefaultConnection"]));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
+// Ensure the database is created and apply migrations
+using (var scope = app.Services.CreateScope())
+{
+    var dbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<ApplicationDbContext>>();
+    using (var context = dbContextFactory.CreateDbContext())
+    {
+        context.Database.Migrate();
+    }
+}
+
+//app.UseLogging();
+
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
-//}
+}
+else
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+}
 
 app.UseHttpsRedirection();
 
@@ -42,5 +59,7 @@ app.MapGet("/getuserdata", () =>
             }
         }
     });
+
+await app.SetupDatabaseAsync();
 
 app.Run();

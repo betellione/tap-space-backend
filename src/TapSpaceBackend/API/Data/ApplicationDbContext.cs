@@ -1,65 +1,111 @@
 ﻿namespace API.Data;
 
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    {
-    }
-
-    public DbSet<User> Users { get; set; }
-    public DbSet<Achievement> Achievements { get; set; }
+    public DbSet<Player> Players { get; set; } = default!;
+    public DbSet<Achievement> Achievements { get; set; } = default!;
+    public DbSet<LootBoxType> LootBoxTypes { get; set; } = default!;
+    public DbSet<PlayerLootBox> PlayerLootBoxes { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<User>(entity =>
-        {
-            entity.HasKey(x => x.Id).HasName("User_pk");
+        ConfigurePlayerEntity(modelBuilder);
+        ConfigureAchievementEntity(modelBuilder);
+        ConfigureLootBoxTypeEntity(modelBuilder);
+        ConfigurePlayerLootBoxEntity(modelBuilder);
+    }
 
-            entity.Property(x => x.Name)
-                .IsRequired()
-                .HasMaxLength(64)
-                .HasColumnName("Name");
+    private static void ConfigurePlayerEntity(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Player>(entity =>
+        {
+            entity.HasKey(x => x.Id);
 
             entity.Property(x => x.Level)
                 .IsRequired()
-                .HasDefaultValue(0)
-                .HasColumnName("Level");
+                .HasDefaultValue(0);
 
             entity.Property(x => x.Experience)
                 .IsRequired()
-                .HasDefaultValue(0)
-                .HasColumnName("Experience");
+                .HasDefaultValue(0);
 
-            entity.Property(x => x.AmountOfDestroyedAsteroid)
+            entity.Property(x => x.AsteroidsDestroyed)
                 .IsRequired()
-                .HasDefaultValue(0)
-                .HasColumnName("AmountOfDestroyedAsteroid");
+                .HasDefaultValue(0);
 
             entity.Property(x => x.Crystals)
                 .IsRequired()
-                .HasDefaultValue(0)
-                .HasColumnName("Crystals");
+                .HasDefaultValue(0);
+
+            entity.Property(x => x.Shields)
+                .IsRequired()
+                .HasDefaultValue(0);
 
             entity.Property(x => x.Gold)
                 .IsRequired()
-                .HasDefaultValue(0)
-                .HasColumnName("Gold");
-        });
+                .HasDefaultValue(0);
 
+            entity.Property(x => x.OpenSlots)
+                .IsRequired()
+                .HasDefaultValue(0);
+
+            entity.HasMany(p => p.PlayerLootBoxes)
+                .WithOne(plb => plb.Player)
+                .HasForeignKey(plb => plb.PlayerId);
+        });
+    }
+
+    private static void ConfigureAchievementEntity(ModelBuilder modelBuilder)
+    {
         modelBuilder.Entity<Achievement>(entity =>
         {
-            entity.HasKey(x => x.Id).HasName("Achievement_pk");
+            entity.HasKey(x => x.Id);
 
             entity.Property(x => x.Title)
                 .IsRequired()
                 .HasMaxLength(128);
+        });
+    }
+
+    private static void ConfigureLootBoxTypeEntity(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<LootBoxType>(entity =>
+        {
+            entity.HasKey(x => x.Id);
+
+            entity.Property(x => x.TypeName)
+                .IsRequired()
+                .HasMaxLength(128);
+
+            entity.HasMany(lbt => lbt.PlayerLootBoxes)
+                .WithOne(plb => plb.LootBoxType)
+                .HasForeignKey(plb => plb.LootBoxTypeId)
+                .HasConstraintName("FK_PlayerLootBox_LootBoxType");
+        });
+    }
+
+    private static void ConfigurePlayerLootBoxEntity(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<PlayerLootBox>(entity =>
+        {
+            entity.Property(plb => plb.SlotNumber)
+                .IsRequired();
+
+            entity.Property(plb => plb.StartOpeningTime)
+                .IsRequired();
+
+            entity.HasOne(plb => plb.Player)
+                .WithMany(p => p.PlayerLootBoxes)
+                .HasForeignKey(plb => plb.PlayerId);
+
+            entity.HasOne(plb => plb.LootBoxType)
+                .WithMany(lbt => lbt.PlayerLootBoxes)
+                .HasForeignKey(plb => plb.LootBoxTypeId);
         });
     }
 }
