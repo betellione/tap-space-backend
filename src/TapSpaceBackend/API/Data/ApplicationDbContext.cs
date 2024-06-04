@@ -1,7 +1,8 @@
-﻿namespace API.Data;
-
+﻿using API.Data.Models;
+using API.Models;
 using Microsoft.EntityFrameworkCore;
-using Models;
+
+namespace API.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
@@ -33,7 +34,34 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         {
             entity.HasKey(x => x.Id);
 
-            entity.Property(x => x.Level)
+            entity.Property(x => x.Rank)
+                .IsRequired()
+                .HasDefaultValue(0);
+            
+            entity.Property(x => x.LevelsCompleted)
+                .IsRequired()
+                .HasDefaultValue(0);
+            
+            entity.Property(x => x.NickName)
+                .HasMaxLength(32);
+            
+            entity.Property(x => x.NormalBluePrint)
+                .IsRequired()
+                .HasDefaultValue(0);
+            
+            entity.Property(x => x.AdvancedBluePrint)
+                .IsRequired()
+                .HasDefaultValue(0);
+            
+            entity.Property(x => x.RareBluePrint)
+                .IsRequired()
+                .HasDefaultValue(0);
+            
+            entity.Property(x => x.LegendaryBluePrint)
+                .IsRequired()
+                .HasDefaultValue(0);
+            
+            entity.Property(x => x.PlaceAtLeaderBoard)
                 .IsRequired()
                 .HasDefaultValue(0);
 
@@ -49,7 +77,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .IsRequired()
                 .HasDefaultValue(0);
 
-            entity.Property(x => x.Shields)
+            entity.Property(x => x.Wins)
                 .IsRequired()
                 .HasDefaultValue(0);
 

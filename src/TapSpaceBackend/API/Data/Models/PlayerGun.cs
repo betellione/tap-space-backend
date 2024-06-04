@@ -1,8 +1,10 @@
-﻿namespace API.Models;
+﻿using API.Data.Models;
+
+namespace API.Models;
 
 public class PlayerGun
 {
-    public int PlayerId { get; set; }
+    public long PlayerId { get; set; }
     public int GunTypeId { get; set; }
     public int Level { get; set; }
     public int SlotNumber { get; set; }
